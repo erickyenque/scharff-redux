@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store, Action } from '@ngrx/store';
-import { Data } from 'src/app/core/models/Data';
+import { Store } from '@ngrx/store';
+import { DatosAdicionales } from 'src/app/core/models/DatosAdicionales';
 import { AppState } from 'src/app/core/state/app.state';
-import { saveData } from '../../store/data.actions';
+import { saveDataAditional } from '../../store/data.actions';
 
 @Component({
   selector: 'app-third-step-welcome',
@@ -16,26 +16,23 @@ export class ThirdStepWelcomeComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>
   ) {
-    this.store.select('data').subscribe(state => {
-      this.validateForm.controls['name'].setValue(state.name);
-      this.validateForm.controls['nickname'].setValue(state.nickname);
-    })
+    
   }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required]],
-      nickname: [null],
+      address: [null, [Validators.required]],
+      city: [null],
       required: [false]
     });
     this.loadData();
   }
 
   loadData() {
-    this.store.select('data').forEach(state => {
-      console.log('second component');
-      this.validateForm.controls['name'].setValue(state.name);
-      this.validateForm.controls['nickname'].setValue(state.nickname);
+    this.store.select('data').subscribe(state => {
+      console.log("Third component", state);
+      this.validateForm.controls['address'].setValue(state.datosAdicionales.address);
+      this.validateForm.controls['city'].setValue(state.datosAdicionales.city);
     })
   }
 
@@ -44,9 +41,9 @@ export class ThirdStepWelcomeComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      let data: Data = {
-        name: this.validateForm.value.name,
-        nickname: this.validateForm.value.nickname
+      let data: DatosAdicionales = {
+        address: this.validateForm.value.address,
+        city: this.validateForm.value.city
       }
       this.saveStore(data);
     } else {
@@ -59,18 +56,18 @@ export class ThirdStepWelcomeComponent implements OnInit {
     }
   }
 
-  saveStore(data: Data) {
-    this.store.dispatch(saveData({ payload: data }));
+  saveStore(datosAdicionales: DatosAdicionales) {
+    this.store.dispatch(saveDataAditional({ payload: datosAdicionales }));
   }
 
   requiredChange(required: boolean): void {
     if (!required) {
-      this.validateForm.get('nickname')!.clearValidators();
-      this.validateForm.get('nickname')!.markAsPristine();
+      this.validateForm.get('city')!.clearValidators();
+      this.validateForm.get('city')!.markAsPristine();
     } else {
-      this.validateForm.get('nickname')!.setValidators(Validators.required);
-      this.validateForm.get('nickname')!.markAsDirty();
+      this.validateForm.get('city')!.setValidators(Validators.required);
+      this.validateForm.get('city')!.markAsDirty();
     }
-    this.validateForm.get('nickname')!.updateValueAndValidity();
+    this.validateForm.get('city')!.updateValueAndValidity();
   }
 }

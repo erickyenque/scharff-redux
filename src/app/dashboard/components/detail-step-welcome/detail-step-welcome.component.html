@@ -1,0 +1,27 @@
+<h3 [ngStyle]="{ 'margin-bottom.px': 16 }">Detalle General</h3>
+<nz-list nzBordered nzHeader="Header" nzFooter="Footer">
+    <nz-list-item>
+        <span nz-typography><mark>[NAME]</mark></span>
+        {{ data.datosGenerales.name }}
+    </nz-list-item>
+    <nz-list-item>
+        <span nz-typography><mark>[LASTNAME]</mark></span>
+        {{ data.datosGenerales.lastname }}
+    </nz-list-item>
+    <nz-list-item>
+        <span nz-typography><mark>[USER]</mark></span>
+        {{ data.datosCorreo.user }}
+    </nz-list-item>
+    <nz-list-item>
+        <span nz-typography><mark>[EMAIL]</mark></span>
+        {{ data.datosCorreo.email }}
+    </nz-list-item>
+    <nz-list-item>
+        <span nz-typography><mark>[ADDRESS]</mark></span>
+        {{ data.datosAdicionales.address }}
+    </nz-list-item>
+    <nz-list-item>
+        <span nz-typography><mark>[CITY]</mark></span>
+        {{ data.datosAdicionales.city }}
+    </nz-list-item>
+</nz-list>

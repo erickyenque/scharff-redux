@@ -11,6 +11,8 @@ import { StoreModule } from '@ngrx/store';
 import { dataReducer } from './store/data.reducer';
 import { SecondStepWelcomeComponent } from './components/second-step-welcome/second-step-welcome.component';
 import { ThirdStepWelcomeComponent } from './components/third-step-welcome/third-step-welcome.component';
+import { DetailStepWelcomeComponent } from './components/detail-step-welcome/detail-step-welcome.component';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { ThirdStepWelcomeComponent } from './components/third-step-welcome/third
     MonitorComponent,
     FirstStepWelcomeComponent,
     SecondStepWelcomeComponent,
-    ThirdStepWelcomeComponent
+    ThirdStepWelcomeComponent,
+    DetailStepWelcomeComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +29,7 @@ import { ThirdStepWelcomeComponent } from './components/third-step-welcome/third
     NzStepsModule,
     ReactiveFormsModule,
     NzFormModule,
+    NzListModule,
     StoreModule.forRoot({ data: dataReducer })
   ]
 })

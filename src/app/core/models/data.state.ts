@@ -1,4 +1,9 @@
+import { DatosAdicionales } from "./DatosAdicionales";
+import { DatosCorreo } from "./DatosCorreo";
+import { DatosGenerales } from "./DatosGenerales";
+
 export interface DataState {
-    name: string;
-    nickname: string;
+    datosGenerales: DatosGenerales;
+    datosCorreo: DatosCorreo;
+    datosAdicionales: DatosAdicionales;
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store, Action } from '@ngrx/store';
-import { Data } from 'src/app/core/models/Data';
+import { Store } from '@ngrx/store';
+import { DatosCorreo } from 'src/app/core/models/DatosCorreo';
 import { AppState } from 'src/app/core/state/app.state';
-import { saveData } from '../../store/data.actions';
+import { saveDataEmail } from '../../store/data.actions';
 
 @Component({
   selector: 'app-second-step-welcome',
@@ -16,26 +16,23 @@ export class SecondStepWelcomeComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>
   ) {
-    this.store.select('data').subscribe(state => {
-      this.validateForm.controls['name'].setValue(state.name);
-      this.validateForm.controls['nickname'].setValue(state.nickname);
-    })
+    
   }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      name: [null, [Validators.required]],
-      nickname: [null],
+      user: [null, [Validators.required]],
+      email: [null],
       required: [false]
     });
     this.loadData();
   }
 
   loadData() {
-    this.store.select('data').forEach(state => {
-      console.log('second component');
-      this.validateForm.controls['name'].setValue(state.name);
-      this.validateForm.controls['nickname'].setValue(state.nickname);
+    this.store.select('data').subscribe(state => {
+      console.log("Second component", state);
+      this.validateForm.controls['user'].setValue(state.datosCorreo.user);
+      this.validateForm.controls['email'].setValue(state.datosCorreo.email);
     })
   }
 
@@ -44,9 +41,9 @@ export class SecondStepWelcomeComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      let data: Data = {
-        name: this.validateForm.value.name,
-        nickname: this.validateForm.value.nickname
+      let data: DatosCorreo = {
+        user: this.validateForm.value.user,
+        email: this.validateForm.value.email
       }
       this.saveStore(data);
     } else {
@@ -59,19 +56,19 @@ export class SecondStepWelcomeComponent implements OnInit {
     }
   }
 
-  saveStore(data: Data) {
-    this.store.dispatch(saveData({ payload: data }));
+  saveStore(datosCorreo: DatosCorreo) {
+    this.store.dispatch(saveDataEmail({ payload: datosCorreo }));
   }
 
   requiredChange(required: boolean): void {
     if (!required) {
-      this.validateForm.get('nickname')!.clearValidators();
-      this.validateForm.get('nickname')!.markAsPristine();
+      this.validateForm.get('email')!.clearValidators();
+      this.validateForm.get('email')!.markAsPristine();
     } else {
-      this.validateForm.get('nickname')!.setValidators(Validators.required);
-      this.validateForm.get('nickname')!.markAsDirty();
+      this.validateForm.get('email')!.setValidators(Validators.required);
+      this.validateForm.get('email')!.markAsDirty();
     }
-    this.validateForm.get('nickname')!.updateValueAndValidity();
+    this.validateForm.get('email')!.updateValueAndValidity();
   }
 
 }

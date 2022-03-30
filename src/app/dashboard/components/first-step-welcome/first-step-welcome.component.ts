@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store, Action } from '@ngrx/store';
-import { Data } from 'src/app/core/models/Data';
+import { Store } from '@ngrx/store';
+import { DatosGenerales } from 'src/app/core/models/DatosGenerales';
 import { AppState } from 'src/app/core/state/app.state';
-import { saveData } from '../../store/data.actions';
+import { saveDataGeneral } from '../../store/data.actions';
 
 @Component({
   selector: 'app-first-step-welcome',
@@ -16,26 +16,22 @@ export class FirstStepWelcomeComponent implements OnInit {
     private fb: FormBuilder,
     private store: Store<AppState>
   ) {
-    this.store.select('data').subscribe(state => {
-      this.validateForm.controls['name'].setValue(state.name);
-      this.validateForm.controls['nickname'].setValue(state.nickname);
-    })
   }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       name: [null, [Validators.required]],
-      nickname: [null],
+      lastname: [null],
       required: [false]
     });
     this.loadData();
   }
 
   loadData() {
-    this.store.select('data').forEach(state => {
-      console.log('second component');
-      this.validateForm.controls['name'].setValue(state.name);
-      this.validateForm.controls['nickname'].setValue(state.nickname);
+    this.store.select('data').subscribe(state => {
+      console.log('First component', state);
+      this.validateForm.controls['name'].setValue(state.datosGenerales.name);
+      this.validateForm.controls['lastname'].setValue(state.datosGenerales.lastname);
     })
   }
 
@@ -44,9 +40,9 @@ export class FirstStepWelcomeComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      let data: Data = {
+      let data: DatosGenerales = {
         name: this.validateForm.value.name,
-        nickname: this.validateForm.value.nickname
+        lastname: this.validateForm.value.lastname
       }
       this.saveStore(data);
     } else {
@@ -59,18 +55,18 @@ export class FirstStepWelcomeComponent implements OnInit {
     }
   }
 
-  saveStore(data: Data) {
-    this.store.dispatch(saveData({ payload: data }));
+  saveStore(datosGenerales: DatosGenerales) {
+    this.store.dispatch(saveDataGeneral({ payload: datosGenerales }));
   }
 
   requiredChange(required: boolean): void {
     if (!required) {
-      this.validateForm.get('nickname')!.clearValidators();
-      this.validateForm.get('nickname')!.markAsPristine();
+      this.validateForm.get('lastname')!.clearValidators();
+      this.validateForm.get('lastname')!.markAsPristine();
     } else {
-      this.validateForm.get('nickname')!.setValidators(Validators.required);
-      this.validateForm.get('nickname')!.markAsDirty();
+      this.validateForm.get('lastname')!.setValidators(Validators.required);
+      this.validateForm.get('lastname')!.markAsDirty();
     }
-    this.validateForm.get('nickname')!.updateValueAndValidity();
+    this.validateForm.get('lastname')!.updateValueAndValidity();
   }
 }
